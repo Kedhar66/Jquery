@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./index.js"></script>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 130%;
+        }
+        .wraper{
+            width:550px;
+            margin:0 auto;
+        }
+        label{
+            width:200px;
+            float:left;
+            position: relative;
+            top:12px;
+        }
+        input{
+            width:320px;
+            font-size: 25px;
+            border:1px solid black;
+            border-radius:5px;
+            padding: 5px 5px 12px 5px;
+        }
+        .formelement{
+            margin-bottom: 10px;
+        }
+        #bt{
+            width:130px;
+            margin-left: 200px;
+
+        }
+        #errors{
+            color:red;
+            font-size:90%;
+        }
+        #success{
+            color:green;
+            font-size:90%;
+        }
+    </style>
+
+
+
+</head>
+<body>
+    <div id="errors"></div>
+    <div id="success"> </div>
+    <div class="wraper">
+    <div class="formelement">
+        <label for="Email">Email</label>
+        <input type="text" name="Email" id="Email">
+    </div>
+    <div class="formelement">
+        <label for="phoneno">Phone-Number</label>
+        <input type="text" name="phoneno" id="phoneno">
+    </div>
+    <div class="formelement">
+        <label for="">Password</label>
+        <input type="password" name="password" id="password">
+
+    </div>
+    <div class="formelement">
+        <label for="">Confirm-Password</label>
+        <input type="password" name="confirmpassword" id="confirmpassword">
+
+    </div>
+
+    <input type="submit" id="bt">
+
+
+    </div>
+
+    <script>
+
+            var errormessage="";
+            var missingfield="";
+            function isEmail(email) {
+                 var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                 return regex.test(email);
+            }
+             $("#bt").click(function(){
+                if($("#Email").val()==""){
+                    missingfield+="<p>Email not field<p/>"
+                }
+                if($("#phoneno").val()==""){
+                    missingfield+="<p>Phono number was not field<p/>"
+                }
+                if($("#password").val()==""){
+                    missingfield+="<p>password was not field<p/>"
+                }
+                if(isEmail($("#Email").val()) == false){
+                     errormessage += "<p> Email id is not valid </p>"
+                }
+                if($.isNumeric($("#phoneno").val()) == false){
+                     errormessage += "<p> Phone number is not valid </p>"
+                }
+                if($("#password").val()!=$("#confirmpassword").val())
+                {
+                    errormessage+="<p> Password does not match</p>"
+
+                }
+                if(errormessage==""){
+                    $("#success").html("Your are registered");
+                }
+                else{
+                    $("#errors").html(errormessage+missingfield);
+                }
+
+            });
+           
+
+    </script>
+    
+</body>
+</html>
