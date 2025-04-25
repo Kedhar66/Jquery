@@ -4,118 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="./index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery added -->
     <style>
-        body{
+        body {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 130%;
         }
-        .wraper{
-            width:550px;
-            margin:0 auto;
+        .wraper {
+            width: 550px;
+            margin: 0 auto;
         }
-        label{
-            width:200px;
-            float:left;
+        label {
+            width: 200px;
+            float: left;
             position: relative;
-            top:12px;
+            top: 12px;
         }
-        input{
-            width:320px;
+        input {
+            width: 320px;
             font-size: 25px;
-            border:1px solid black;
-            border-radius:5px;
+            border: 1px solid black;
+            border-radius: 5px;
             padding: 5px 5px 12px 5px;
         }
-        .formelement{
+        .formelement {
             margin-bottom: 10px;
         }
-        #bt{
-            width:130px;
+        #bt {
+            width: 130px;
             margin-left: 200px;
-
         }
-        #errors{
-            color:red;
-            font-size:90%;
+        #errors {
+            color: red;
+            font-size: 90%;
         }
-        #success{
-            color:green;
-            font-size:90%;
+        #success {
+            color: green;
+            font-size: 90%;
         }
     </style>
-
-
-
 </head>
 <body>
     <div id="errors"></div>
-    <div id="success"> </div>
+    <div id="success"></div>
     <div class="wraper">
-    <div class="formelement">
-        <label for="Email">Email</label>
-        <input type="text" name="Email" id="Email">
-    </div>
-    <div class="formelement">
-        <label for="phoneno">Phone-Number</label>
-        <input type="text" name="phoneno" id="phoneno">
-    </div>
-    <div class="formelement">
-        <label for="">Password</label>
-        <input type="password" name="password" id="password">
-
-    </div>
-    <div class="formelement">
-        <label for="">Confirm-Password</label>
-        <input type="password" name="confirmpassword" id="confirmpassword">
-
-    </div>
-
-    <input type="submit" id="bt">
-
-
+        <div class="formelement">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
+        </div>
+        <div class="formelement">
+            <label for="Email">Email</label>
+            <input type="text" name="Email" id="Email">
+        </div>
+        <div class="formelement">
+            <label for="phoneno">Phone Number</label>
+            <input type="number" name="phoneno" id="phoneno" maxlength="10">
+        </div>
+        <div class="formelement">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+        </div>
+        <div class="formelement">
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="password" name="confirmpassword" id="confirmpassword">
+        </div>
+        <input type="submit" id="bt">
     </div>
 
     <script>
+        function isEmail(email) {
+            var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            return regex.test(email);
+        }
 
-            var errormessage="";
-            var missingfield="";
-            function isEmail(email) {
-                 var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                 return regex.test(email);
+        $("#bt").click(function () {
+            let errormessage = "";
+            let missingfield = "";
+
+            if ($("#name").val() == "") {
+                missingfield += "<p>Name not filled</p>";
             }
-             $("#bt").click(function(){
-                if($("#Email").val()==""){
-                    missingfield+="<p>Email not field<p/>"
-                }
-                if($("#phoneno").val()==""){
-                    missingfield+="<p>Phono number was not field<p/>"
-                }
-                if($("#password").val()==""){
-                    missingfield+="<p>password was not field<p/>"
-                }
-                if(isEmail($("#Email").val()) == false){
-                     errormessage += "<p> Email id is not valid </p>"
-                }
-                if($.isNumeric($("#phoneno").val()) == false){
-                     errormessage += "<p> Phone number is not valid </p>"
-                }
-                if($("#password").val()!=$("#confirmpassword").val())
-                {
-                    errormessage+="<p> Password does not match</p>"
+            if ($("#Email").val() == "") {
+                missingfield += "<p>Email not filled</p>";
+            }
+            if ($("#phoneno").val() == "") {
+                missingfield += "<p>Phone number not filled</p>";
+            }
+            if ($("#password").val() == "") {
+                missingfield += "<p>Password not filled</p>";
+            }
 
-                }
-                if(errormessage==""){
-                    $("#success").html("Your are registered");
-                }
-                else{
-                    $("#errors").html(errormessage+missingfield);
-                }
+            if ($("#Email").val() && !isEmail($("#Email").val())) {
+                errormessage += "<p>Email ID is not valid</p>";
+            }
 
-            });
-           
+            let phoneVal = $("#phoneno").val();
+            if (phoneVal && (!$.isNumeric(phoneVal) || phoneVal.length != 10)) {
+                errormessage += "<p>Phone number must be 10 digits</p>";
+            }
 
+            if ($("#password").val() != $("#confirmpassword").val()) {
+                errormessage += "<p>Passwords do not match</p>";
+            }
+
+            if (errormessage == "" && missingfield == "") {
+                $("#success").html("You are registered!");
+                $("#errors").html("");
+            } else {
+                $("#errors").html(errormessage + missingfield);
+                $("#success").html("");
+            }
+        });
+        $("#phoneno").on("input", function () {
+            if ($(this).val().length > 10) {
+                $(this).val($(this).val().slice(0, 10));
+            }
+        });
     </script>
-    
 </body>
 </html>
